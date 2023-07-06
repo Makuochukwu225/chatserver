@@ -6,6 +6,17 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2pqa1.mongodb.net/chatdb`).on('open', () => {
+  // Define the message schema
+  const messageSchema = new mongoose.Schema({
+    message: {
+      type: String,
+      required: true,
+    },
+  });
+
+  // Create the Message model
+  const Message = mongoose.model('Message', messageSchema);
+
   app.get('/', (req, res) => {
     res.send('Chat App Server');
   });
@@ -20,9 +31,20 @@ mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2
     io.on("connection", function (socket) {
       console.log("Made socket connection");
 
-      socket.on('message', function (data) {
-        console.log(`currentSketch ${data}`);
-        io.emit('message', `${data}`);
+      // Event when a new message is received
+      socket.on('message', (message) => {
+        // Save the message to MongoDB using Mongoose
+        const newMessage = new Message({ message });
+        newMessage.save((err, savedMessage) => {
+          if (err) {
+            console.error('Error saving message to MongoDB:', err);
+            // Handle the error as desired, such as sending an error response to the client
+            return;
+          }
+
+          // Broadcast the message to all connected clients
+          io.emit('message', savedMessage);
+        });
       });
       socket.on('error', (error) => {
         console.error('Socket error:', error);
