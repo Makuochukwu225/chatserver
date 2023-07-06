@@ -33,8 +33,6 @@ mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2
         console.log(`allSketches ${data}`);
         io.emit('allSketches', `${data}`)
       });
-
-
       //Whenever someone disconnects this piece of code executed
       socket.on('disconnect', function () {
         console.log('A user disconnected');
