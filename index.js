@@ -1,6 +1,6 @@
 const express = require("express");
 const socket = require("socket.io");
-
+const mongoose = require('mongoose');
 // App setup
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -10,6 +10,17 @@ const server = app.listen(PORT, function () {
   console.log(`ws://localhost:${PORT}`);
 });
 
+
+
+// mongoose.set('debug', true);
+const url = 'mongodb://localhost:27017';
+
+const connection = mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2pqa1.mongodb.net/chatdb`).on('open', () => { console.log("MongoDB Connected"); }).on('error', () => {
+    console.log("MongoDB Connection error");
+    app.get('/', (req, res) => {
+      res.send('Chat App Server');
+    });
+});
 // Static files
 // app.use(express.static("public"));
 
@@ -35,3 +46,4 @@ io.on("connection", function (socket) {
       console.log('A user disconnected');
   });
 });
+
