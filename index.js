@@ -9,17 +9,10 @@ const app = express();
 
 
 
-mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2pqa1.mongodb.net/chatdb`).on('open', () => { console.log("MongoDB Connected"); }).on('error', () => {
-  console.log("MongoDB Connection error");
+mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2pqa1.mongodb.net/chatdb`).on('open', () => {
   app.get('/', (req, res) => {
     res.send('Chat App Server');
   });
-
-
-
-
-
-
   const server = app.listen(PORT, function () {
     console.log(`Listening on port ${PORT}`);
     console.log(`http://localhost:${PORT}`);
@@ -48,6 +41,20 @@ mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2
       });
     });
   });
+
+
+
+  console.log("MongoDB Connected");
+}).on('error', () => {
+  console.log("MongoDB Connection error");
+
+
+
+
+
+
+
+
 });
 // Static files
 // app.use(express.static("public"));
