@@ -26,12 +26,17 @@ mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2
 
       socket.on('message', function (data) {
         console.log(`currentSketch ${data}`);
-        io.emit('message', `${data}`)
+        io.emit('message', `${data}`);
       });
 
       socket.on('allSketches', function (data) {
         console.log(`allSketches ${data}`);
-        io.emit('allSketches', `${data}`)
+        io.emit('allSketches', `${data}`);
+      });
+      socket.on('error', (error) => {
+        console.error('Socket error:', error);
+        io.emit('error', `${data}`);
+        // Handle the error as desired
       });
       //Whenever someone disconnects this piece of code executed
       socket.on('disconnect', function () {
