@@ -5,10 +5,6 @@ const mongoose = require('mongoose');
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-
-
-
-
 mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2pqa1.mongodb.net/chatdb`).on('open', () => {
   app.get('/', (req, res) => {
     res.send('Chat App Server');
@@ -28,11 +24,6 @@ mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2
         console.log(`currentSketch ${data}`);
         io.emit('message', `${data}`);
       });
-
-      socket.on('allSketches', function (data) {
-        console.log(`allSketches ${data}`);
-        io.emit('allSketches', `${data}`);
-      });
       socket.on('error', (error) => {
         console.error('Socket error:', error);
         io.emit('error', `${data}`);
@@ -49,8 +40,6 @@ mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2
   console.log("MongoDB Connection error");
 
 });
-// Static files
-// app.use(express.static("public"));
 
 
 
