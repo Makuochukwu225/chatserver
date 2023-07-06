@@ -15,7 +15,7 @@ mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2
   });
 
   // Create the Message model
-  const Message = mongoose.model('Message', messageSchema);
+  const Message = mongoose.model('messages', messageSchema);
 
   app.get('/', (req, res) => {
     res.send('Chat App Server');
