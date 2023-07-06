@@ -32,10 +32,10 @@ mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2
       console.log("Made socket connection");
 
       // Event when a new message is received
-      socket.on('message', (message) => {
+      socket.on('message', async (message) => {
         // Save the message to MongoDB using Mongoose
         const newMessage = new Message({ message });
-        newMessage.save((err, savedMessage) => {
+        await newMessage.save((err, savedMessage) => {
           if (err) {
             console.error('Error saving message to MongoDB:', err);
             // Handle the error as desired, such as sending an error response to the client
