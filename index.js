@@ -1,9 +1,12 @@
 const express = require("express");
 const socket = require("socket.io");
+var bodyParser = require("body-parser");
 const mongoose = require('mongoose');
+
 // App setup
 const PORT = process.env.PORT || 3000;
 const app = express();
+
 
 mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2pqa1.mongodb.net/chatdb`).on('open', () => {
   // Define the message schema
@@ -15,12 +18,28 @@ mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2
   });
 
   // Create the Message model
-  const Message = mongoose.model('messages', messageSchema);
+  const Message = mongoose.model('messages', { name : String, message : String});
 
-  app.get('/', (req, res) => {
-    res.send('Chat App Server');
-  });
+
   const server = app.listen(PORT, function () {
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({extended: false}))
+    app.get('/', (req, res) => {
+      res.send('Chat App Server');
+    });
+    app.get('/messages', (req, res) => {
+      Message.find({},(err, messages)=> {
+        res.send(messages);
+      })
+    });
+    app.post('/messages', (req, res) => {
+      var message = new Message(req.body);
+      message.save((err) =>{
+        if(err)
+          sendStatus(500);
+        res.sendStatus(200);
+      })
+    });
     console.log(`Listening on port ${PORT}`);
     console.log(`http://localhost:${PORT}`);
     console.log(`ws://localhost:${PORT}`);
