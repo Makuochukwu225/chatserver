@@ -39,7 +39,7 @@ mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2
 
 
         // Broadcast the message to all connected clients
-        io.emit('message', savedMessage);
+        io.emit('message', newMessage);
 
       });
       socket.on('error', (error) => {
