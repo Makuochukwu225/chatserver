@@ -1,68 +1,37 @@
-const express = require('express');
-const http = require('http');
-const socketIO = require('socket.io');
-const MongoClient = require('mongodb').MongoClient;
+const express = require("express");
+const socket = require("socket.io");
 
+// App setup
+const PORT = process.env.PORT || 3000;
 const app = express();
-const server = http.createServer(app);
-const io = socketIO(server);
-const port = 3000; // Or any other port you prefer
+const server = app.listen(PORT, function () {
+  console.log(`Listening on port ${PORT}`);
+  console.log(`http://localhost:${PORT}`);
+  console.log(`ws://localhost:${PORT}`);
+});
 
-// // MongoDB configuration
-// const mongoURL = 'mongodb://localhost:27017';
-// const dbName = 'chat_app';
+// Static files
+// app.use(express.static("public"));
 
-// MongoClient.connect(mongoURL, { useUnifiedTopology: true }, (err, client) => {
-//   if (err) {
-//     console.error('Error connecting to MongoDB:', err);
-//     return;
-//   }
+// Socket setup
+const io = socket(server);
 
-//   console.log('Connected to MongoDB');
+io.on("connection", function (socket) {
+  console.log("Made socket connection");
 
-//   const db = client.db(dbName);
+  socket.on('currentSketch', function (data) {
+    console.log(`currentSketch ${data}`);
+    io.emit('currentSketch', `${data}`)
+  });
 
-//   // Socket.io events
-//   io.on('connection', (socket) => {
-//     console.log('A user connected');
+  socket.on('allSketches', function (data) {
+    console.log(`allSketches ${data}`);
+    io.emit('allSketches', `${data}`)
+  });
+  
 
-//     socket.on('chat message', (message) => {
-//       saveMessageToDatabase(message); // Save the message to the database
-//       io.emit('chat message', message); // Broadcast the message to all connected clients
-//     });
-
-//     socket.on('disconnect', () => {
-//       console.log('A user disconnected');
-//     });
-//   });
-
-//   function saveMessageToDatabase(message) {
-//     // Save the message to the "messages" collection in MongoDB
-//     const collection = db.collection('messages');
-//     collection.insertOne(message, (err) => {
-//       if (err) {
-//         console.error('Error saving message to MongoDB:', err);
-//       }
-//     });
-//   }
-
-//   // Start the server
-//   server.listen(port, () => {
-//     console.log(`Server listening on port ${port}`);
-//   });
-// });
-
-// // Express routes
-// app.get('/messages', (req, res) => {
-//   // Retrieve messages from the "messages" collection in MongoDB
-//   const collection = db.collection('messages');
-//   collection.find({}).toArray((err, messages) => {
-//     if (err) {
-//       console.error('Error retrieving messages from MongoDB:', err);
-//       res.status(500).send('Internal Server Error');
-//       return;
-//     }
-
-//     res.json(messages);
-//   });
-// });
+   //Whenever someone disconnects this piece of code executed
+  socket.on('disconnect', function () {
+      console.log('A user disconnected');
+  });
+});
