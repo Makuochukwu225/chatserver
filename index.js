@@ -24,9 +24,9 @@ mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2
     io.on("connection", function (socket) {
       console.log("Made socket connection");
 
-      socket.on('currentSketch', function (data) {
+      socket.on('message', function (data) {
         console.log(`currentSketch ${data}`);
-        io.emit('currentSketch', `${data}`)
+        io.emit('message', `${data}`)
       });
 
       socket.on('allSketches', function (data) {
