@@ -39,19 +39,9 @@ mongoose.createConnection(`mongodb+srv://officialrrye5:V8NjzE362JfWLNEB@chat.nm2
       });
     });
   });
-
-
-
   console.log("MongoDB Connected");
 }).on('error', () => {
   console.log("MongoDB Connection error");
-
-
-
-
-
-
-
 
 });
 // Static files
